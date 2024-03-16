@@ -23,16 +23,15 @@ def index(request):
     return render(request, "index.html", data)
 
 def sign_up(request):
-
     if request.method == 'POST':
         form = SignUp(request.POST)
         if form.is_valid():
-            messages.success(request, "account created succesfuly !!")
+            messages.success(request, "Your account created succesfuly !!")
             # form.save() # save user only
             user = form.save()
             group = Group.objects.get(name='viewer') # adding user in to a group on Signup
             user.groups.add(group)
-            return redirect('dashboard')
+            form = SignUp()
     else:
         form = SignUp()
     data = {'form': form}
@@ -61,9 +60,7 @@ def Log_in(request):
 
 def dashboard(request):
     if request.user.is_authenticated:
-
         name = request.user
-
         data = {'name': name}
         return render(request, "dashboard.html", data)
     else:
